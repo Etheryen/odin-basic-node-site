@@ -1,31 +1,19 @@
 const http = require('http');
 const fs = require('fs');
 
+const pages = {
+  '/': 'index.html',
+  '/about': 'about.html',
+  '/contact-me': 'contact-me.html',
+};
+
 http
   .createServer((req, res) => {
-    if (req.url === '/') {
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      const html = fs.readFileSync('pages/index.html');
-      res.end(html);
-      return;
-    }
+    const page = pages[req.url] ?? '404.html';
+    const status = page === '404.html' ? 404 : 200;
+    const html = fs.readFileSync(`pages/${page}`);
 
-    if (req.url === '/about') {
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      const html = fs.readFileSync('pages/about.html');
-      res.end(html);
-      return;
-    }
-
-    if (req.url === '/contact-me') {
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      const html = fs.readFileSync('pages/contact-me.html');
-      res.end(html);
-      return;
-    }
-
-    res.writeHead(404, { 'Content-Type': 'text/html' });
-    const html = fs.readFileSync('pages/404.html');
+    res.writeHead(status, { 'Content-Type': 'text/html' });
     res.end(html);
   })
   .listen(8080);
