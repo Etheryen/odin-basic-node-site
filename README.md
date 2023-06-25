@@ -1,3 +1,5 @@
 # odin-basic-node-site
 
-A basic node js http server with plain html pages.
+A basic express.js http server with plain html pages.
+
+The package manager is pnpm.

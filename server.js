@@ -1,19 +1,22 @@
-const http = require('http');
-const fs = require('fs');
+const express = require('express');
+const port = 8080;
 
-const pages = {
-  '/': 'index.html',
-  '/about': 'about.html',
-  '/contact-me': 'contact-me.html',
-};
+const app = express();
 
-http
-  .createServer((req, res) => {
-    const page = pages[req.url] ?? '404.html';
-    const status = page === '404.html' ? 404 : 200;
-    const html = fs.readFileSync(`pages/${page}`);
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/pages/index.html');
+});
 
-    res.writeHead(status, { 'Content-Type': 'text/html' });
-    res.end(html);
-  })
-  .listen(8080);
+app.get('/about', (req, res) => {
+  res.sendFile(__dirname + '/pages/about.html');
+});
+
+app.get('/contact-me', (req, res) => {
+  res.sendFile(__dirname + '/pages/contact-me.html');
+});
+
+app.get('*', (req, res) => {
+  res.status(404).sendFile(__dirname + '/pages/404.html');
+});
+
+app.listen(8080, () => console.log(`App running on http://localhost:${port}`));
